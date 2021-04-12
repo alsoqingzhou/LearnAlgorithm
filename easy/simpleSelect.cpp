@@ -3,7 +3,7 @@
 int main () {
     int a[10] = {6, 4, 5, 7, 2, 3, 9, 8};
     for(int i = 0; i < 8; i++) {
-        int k = i;
+        int k = i; // the smallest number
         for(int j = i + 1; j < 8; j++) {
             if(a[j] < a[k]) {
                 k = j;
