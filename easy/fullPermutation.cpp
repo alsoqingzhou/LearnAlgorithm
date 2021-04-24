@@ -1,7 +1,11 @@
-#include <cstdio>
+#include<stdio.h>
+#include<string.h>
+#include<algorithm>
+using namespace std;
 const int maxn = 11;
 
-int n, P[maxn];
+int n;
+int P[maxn];
 bool hashTable[maxn] = {false};
 
 void generateP(int index) {
@@ -13,7 +17,7 @@ void generateP(int index) {
         return;
     }
     for(int x = 1; x <= n; x++) {
-        if(hashTable[x] = false) {
+        if(hashTable[x] == false) {
             P[index] = x;
             hashTable[x] = true;
             generateP(index + 1);
