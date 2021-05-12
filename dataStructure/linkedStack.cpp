@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
 
+// 不带头结点的链栈基本操作
 typedef struct LNode{
     int data;
     struct LNode *next;
