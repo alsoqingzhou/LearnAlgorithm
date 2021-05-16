@@ -8,15 +8,20 @@ typedef struct {
     int length; //存储字符串的长度
 } Str;
 
-void strAssign(Str &str, char *ch) {
-    cout <<str.ch<<endl;
-    //其中str为将被赋值的字符串，ch指向赋值字符串
-    if(str.ch) {
-        free(str.ch); //如果str原来有值，则先清空
-    }
+int strAssign(Str &str, char *ch) {
+    // cout <<str.ch<<endl;
+    // cout <<ch<<endl;
+
+    // 其中str为将被赋值的字符串，ch指向赋值字符串
+    // if(str.ch) {
+    //     free(str.ch); //如果str原来有值，则先清空
+    //     //free运行后整个函数strAssign会立即返回，不执行下面所有代码
+    // }
+
 
     int len = 0; //用于记录赋值字符串的长度
-    char *c = ch; //c用于跟踪字符串中每个字符
+    char* c = ch; //c用于跟踪字符串中每个字符
+
 
     //读取赋值字符串的长度
     while(*c) {//只要c没有指向字符串末尾，继续前进
@@ -27,7 +32,7 @@ void strAssign(Str &str, char *ch) {
     if(len == 0) { //赋值字符串为空串
         str.ch = NULL;
         str.length = 0;
-        // return 1;
+        return 1;
     } else {
         //为str重新分配需要的存储空间
         str.ch = (char *)malloc(sizeof(char) * (len+1));
@@ -41,7 +46,7 @@ void strAssign(Str &str, char *ch) {
 
         cout<<str.ch<<endl;
 
-        return ;
+        return 1;
     }
 }
 
