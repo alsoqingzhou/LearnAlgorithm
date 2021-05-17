@@ -8,6 +8,7 @@ typedef struct {
     int length; //存储字符串的长度
 } Str;
 
+//将一个字符串赋值给另一个
 int strAssign(Str &str, char *ch) {
     // cout <<str.ch<<endl;
     // cout <<ch<<endl;
@@ -43,17 +44,61 @@ int strAssign(Str &str, char *ch) {
             ++c; //c指向下一个字符
         }
         str.length = len;
-
-        cout<<str.ch<<endl;
-
         return 1;
     }
 }
 
-int main() {
-    Str str;
-    str.ch = (char*)"also";
+//比较两个字符串大小
+int strCompare(Str s1, Str s2) {
+    for(int i = 0; i < s1.length && i < s2.length; ++i) {
+        //依次遍历比较两个字符串每一位，直到其中一个字符串末尾
+        if(s1.ch[i] != s2.ch[i]) { //两个字符串第一次不相同的位置
+            return s1.ch[i] - s2.ch[i];
+            //返回结果负则s1小
+        }
+    }
+    //跳出循环，前面字符都相同，其中一个字符串更短
+    return s1.length - s2.length;
+    //返回结果为负则s1小
+}
 
-    strAssign(str, (char*)"qingzhou");
+//返回字符串长度
+int countLength(Str st) {
+    int length = 0; //累计长度
+    char* c = st.ch; //追踪指针
+    while(*c) {
+        ++length;
+        ++c;
+    }
+    return length;
+}
+
+//将两个字符串合并得到一个新的字符串
+int merge(Str &st, Str s1, Str s2) {
+    int len; //累计将合并的两个字符串总长
+
+    len = countLength(s1) + countLength(s2);
+
+    st.ch = (char*)malloc(sizeof(char) * (len + 1));
+
+    for(int i = 0; i < countLength(s1); ++i) {
+        st.ch[i] = s1.ch[i];
+    }
+    for(int i = 0; i <= countLength(s2); ++i) {
+        st.ch[i + countLength(s1)]  = s2.ch[i];
+    }
+    st.length = len;
+
+    cout << st.ch<<endl;
+    return 1;
+}
+
+int main() {
+    Str s1, s2;
+    Str ss;
+    strAssign(s1, (char*)"qingzhou");
+    strAssign(s2, (char*)"also");
+    // printf("%d", strCompare(s1, s2));
+    merge(ss, s1, s2);
     return 0;
 }
