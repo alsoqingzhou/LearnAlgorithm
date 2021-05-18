@@ -93,6 +93,52 @@ int merge(Str &st, Str s1, Str s2) {
     return 1;
 }
 
+//求字串操作
+int subString(Str &substr, Str str, int pos, int len) {
+    //分别传入输出的子串，母串，开始找子串位置，子串长度
+    if(pos<0 || pos>=str.length || len<0 || len>str.length) {
+        //几种不合法的输入
+        //位置超前或过后，子串过短或过长
+        return 0;
+    }
+    if(substr.ch) {
+        free(substr.ch); //原子串有值，清空，字符指针指空
+        substr.ch = NULL;
+    }
+
+    //开始求子串
+    if(len == 0) { //特殊情况单独处理，子串为空串
+        substr.ch = NULL;
+        substr.length = 0;
+        return 1;
+    } else {
+        substr.ch = (char*)malloc(sizeof(char) * (len+1));
+        int i = pos; //跟踪母串位置
+        int j = 0; //跟踪子串位置
+
+        while(i < pos+len) { //母串没走到结束位置，继续
+            substr.ch[j] = str.ch[i];
+            ++i;
+            ++j;
+        }
+        //子串求出，此时j指向子串最后字符后一个位置
+        substr[j] = '/0';
+        substr.length = len;
+        return 1;
+    }
+}
+
+//串清空
+int clearString(Str &str) {
+    if(str.ch) {
+        free(str.ch);
+        str.ch = NULL;
+    }
+    str.length = 0;
+    return 1;
+}
+
+
 int main() {
     Str s1, s2;
     Str ss;
