@@ -122,7 +122,7 @@ int subString(Str &substr, Str str, int pos, int len) {
             ++j;
         }
         //子串求出，此时j指向子串最后字符后一个位置
-        substr[j] = '/0';
+        substr.ch[j] = '\0';
         substr.length = len;
         return 1;
     }
@@ -138,13 +138,35 @@ int clearString(Str &str) {
     return 1;
 }
 
+//简单模式匹配
+int match(Str str, Str substr) {
+    int i = 1, j = 1, k = i;
+    //i跟踪母串，j跟踪匹配串，k记录母串开始匹配位置
+    while(i <= str.length && j <= substr.length) {
+            // cout <<"aaa"<<endl;
+        //母串和匹配串未确认完成，继续确认
+        if(str.ch[i] == substr.ch[j]) {
+            //该位相同，比较下一位
+            ++i;
+            ++j;
+        } else {
+            i = ++k;//母串从之前的下一位开始匹配
+            j = 1; //匹配串从头开始
+        }
+    }
+    if(j > substr.length) { //匹配串到最后一个字符都符合
+        return k; //匹配成功，返回母串匹配部分的开始位置
+    } else {
+        return 0; //否则匹配失败
+    }
+}
 
 int main() {
     Str s1, s2;
-    Str ss;
     strAssign(s1, (char*)"qingzhou");
-    strAssign(s2, (char*)"also");
+    strAssign(s2, (char*)"zhou");
     // printf("%d", strCompare(s1, s2));
-    merge(ss, s1, s2);
+    // merge(ss, s1, s2);
+    printf("%d", match(s1, s2));
     return 0;
 }
