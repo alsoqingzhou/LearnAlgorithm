@@ -170,7 +170,9 @@ void getNext(Str subString, int next[]) {
     int t = 0; //初始t值为next[1]的值，形成统一
     
     //作为数值看，t存储next[j]的值，即j位置前面串的最长前后缀长度加1
-    //而上面的数值，当把t看作指针时，刚好指向j位置前面串的最长前缀的后一个位置
+    //把主串考虑进来的话，t指向的是如果j位置和主串不匹配，跳转之后将和主串那个位置去比较的字符
+
+    //当把t看作指针时，刚好指向j位置前面串的最长前缀的后一个位置
     //而t指向的这个位置的数值如果和j位置相等，
     //效果相当于比较两个新的位置，确定next[j]时的最长前缀向后拓展一个位置（即t指的位置），要确定最长前后缀的串后拓展一个位置（即j这个位置）
     //如果这两个位置相等，则next[j+1]的最长前后缀长度为上一次长度加一，即t+1
@@ -183,6 +185,9 @@ void getNext(Str subString, int next[]) {
     //如果最糟糕的情况，next[t]为0这种特殊情况，那么next[j+1]前面的最长前后缀长度就是0，next[j+1] = 1
     next[1] = 0;
     while(j < subString.length) {
+
+        //如果此时t已经跳指向第一个位置，即t=1,而此时和j位置的字符不等，则进入else，t = next[1] = 0
+        // 此时满足if判断中的t==0条件，此时意味着j+1之前的字符串最长前后缀长度为0，则next[j+1] = t+1 = 1,刚好满足此特殊条件
         if(t == 0 || subString.ch[j] == subString.ch[t]) {
             next[j + 1] = t + 1;
             ++t; //最长前后缀长度可以+1
@@ -190,6 +195,28 @@ void getNext(Str subString, int next[]) {
         } else {
             t = next[t];
         }
+    }
+}
+
+// KMP算法实现
+int KMP(Str str, Str subString, int next[]) {
+    int i = 1; //跟踪主串位置
+    int j = 1; //跟踪模式串位置
+    while(i <= str.length && j <= subString.length) {
+        if(j == 0 || str.ch[i] == subString.ch[j]) {
+            //j=0的情况意味着j指向第一位，仍不匹配，则进入else，j被赋值next[1] = 0
+            //此时刚好该if也能处理这种特殊情况。
+            
+            ++i; //特殊情况下这句话表示主串比较当前字符下一个
+            ++j; //特殊情况下++j刚好让j=1,即模式串从第一个位置开始比较
+        } else {
+            j = next[j]; //i和j所指字符不匹配，next数值告诉j如何跳转
+        }
+    }
+    if(j > subString.length) {//进入该条件说明模式串比较完最后一个字符都匹配，++之后刚好大于长度
+        return i - subString.length; //此时i指向主串最后一个匹配位置后一位
+    } else { //匹配失败
+        return 0;
     }
 }
 
