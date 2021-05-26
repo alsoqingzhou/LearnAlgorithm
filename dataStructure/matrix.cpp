@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <iostream>
+using namespace std;
 
 int const maxsize = 10010;
 
@@ -20,6 +22,37 @@ void matrixMulti(int C[][maxsize], int A[][maxsize], int B[][maxsize], int row, 
             C[i][j] = 0; // 初始化为0
             for(int k = 0; k < n; ++k) { // n的值表示i行有n列或者j列有n行个元素
                 C[i][j] += A[i][k]*B[k][j]; // 对于A而言，是i行各列元素，于B而言，是j列各行元素
+            }
+        }
+    }
+}
+
+// 三元组建立稀疏矩阵
+void createTriMat(float A[][maxsize], float B[][3], int row, int col) {
+    int k = 1;
+    for(int i = 0; i < row; ++i) {
+        for(int j = 0; j < col; ++j) {
+            if(A[i][j] != 0) {
+                B[k][0] = A[i][j];
+                B[k][1] = i;
+                B[k][2] = j;
+                ++k;
+            }
+        }
+    }
+    B[0][0] = k; //记录矩阵非零元素个数
+    B[0][1] = row; //记录矩阵行数
+    B[0][2] = col; //记录矩阵列数
+}
+
+void print(float B[][3]) {
+    int k = 1;
+    for(int i = 0; i < B[0][1]; ++i) {
+        for(int j = 0; j < B[0][2]; ++j) {
+            if(i == B[k][1] && j == B[k][2]) {// 依次遍历的行列为非零元素位置，输出对应元素
+                cout << B[k][0] << " ";
+            } else { // 不符合，则该位置没有存于三元组，说明矩阵此位置为0
+                cout << "0 ";
             }
         }
     }
