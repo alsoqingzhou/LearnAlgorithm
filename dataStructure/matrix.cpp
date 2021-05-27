@@ -45,6 +45,7 @@ void createTriMat(float A[][maxsize], float B[][3], int row, int col) {
     B[0][2] = col; //记录矩阵列数
 }
 
+// 打印出三元数组建立的矩阵
 void print(float B[][3]) {
     int k = 1;
     for(int i = 0; i < B[0][1]; ++i) {
@@ -57,3 +58,18 @@ void print(float B[][3]) {
         }
     }
 }
+
+// 对稀疏矩阵建立十字链表存储
+
+// 十字链表普通结点定义
+typedef struct OLNode {
+    int row, col; // 保存行列坐标
+    struct OLNode *right, *down; // 指向和自己相同的右方，下方结点
+    float val; //保存矩阵对应位置数值
+} OLNode;
+
+// 十字链表头结点定义
+typedef struct {
+    OLNode *rHead, *cHead; // 指向右方和下方结点数组
+    int m, n, k; // 分别保存矩阵行数，列数，非零元素个数
+} CrossList;
