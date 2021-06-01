@@ -68,3 +68,101 @@ int getDepth(BTNode *p) {
         return max(left, right) + 1;
     }
 }
+
+// 二叉树查找值为key的结点是否存在
+void search(BTNode *p, BTNode *&q, int key) {
+    if(p != NULL) {
+        if(p->data == key) { // 到达结点后先对该结点数据进行访问判断，故采用的先序遍历
+            q = p;
+        } else {
+            search(p->lchild, q, key);
+            search(p->rchild, q, key);
+        }
+    }
+}
+
+// 剪枝操作优化上述搜索代码
+void search2(BTNode *p, BTNode *&q, int key) {
+    if(p != NULL) {
+        if(p->data == key) {
+            q = p;
+        } else {
+            search2(p->lchild, q, key);
+            if(q == NULL) { //左子树如果没有找到，才会搜索右子树
+                search2(p->rchild, q, key);
+            }
+        }
+    }
+}
+
+// 输出先序遍历第k个结点的值
+// 计数i应放在函数体外作为全局变量
+int i = 1; //用于计数访问到第几个结点
+
+void printK(BTNode *p, int k) {
+    // 初始p指向根结点，即访问到序列第一个结点
+    if(p != NULL) {
+        if(i == k) {
+            cout << p->data<<endl;
+            return;
+        } else {
+            ++i; // 将访问下一个结点，计数加一
+            printK(p->lchild, k);
+            printK(p->rchild, k);
+        }
+    }
+}
+
+// 为构造不同顺序遍历的模板，换种写法
+int n = 0; //注意是访问计数器，不是遍历结点计数器，没有访问结点之前为0
+// 这样对所有顺序访问都是公平的
+// 上面写法计数器初始值为1，有默认遍历到第一个结点即访问，默认了先序遍历
+void printFun(BTNode *p, int k) {
+    if(p != NULL) {
+        //下面这部分即访问代码
+        ++n;//准备访问当前p遍历指向的结点，计数器加一
+        if(k == n) {
+            //如果是访问的第k个，满足条件打印
+            cout <<p->data<<endl;
+            return; //跳出递归
+        }
+        // 访问代码到此结束
+
+        // 如果是中序，后序，将上面几行代码放到下面两行中间，末尾
+        printFun(p->lchild, k);
+        // 放这里中序遍历
+        printFun(p->rchild, k);
+        // 放这里后序遍历
+    }
+}
+
+// 层次遍历
+int const maxsize = 10010;
+void level(BTNode *p) {
+    // 先创建一个队列用于从左向右保存每一层的结点值
+    int front, rear;
+    BTNode *que[maxsize]; //该数组构建循环队列，其中保存的是结点的指针
+    front = rear = 0;
+    BTNode *q; // 该二叉树指针指向将要出队的元素
+
+    // 开始层次遍历
+    if(p != NULL) { //只要不是空结点，就要入队出队遍历
+        rear = (rear+1) % maxsize;
+        que[rear] = p; //p为根节点，此时根节点入队
+        while(front != rear) {// 只要队列不空，循环继续
+            front = (front + 1) % maxsize;//队首出队
+            q = que[front];
+            Visit(q);
+
+            if(q->lchild != NULL) { //有左孩子，左孩子入队
+                rear = (rear + 1) % maxsize;
+                que[rear] = q->lchild;
+            }
+            if(q->rchild != NULL) { //有右孩子，右孩子入队
+                rear = (rear + 1) % maxsize;
+                que[rear] = q->rchild;
+            }
+
+        }
+    }
+}
