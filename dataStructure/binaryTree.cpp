@@ -166,3 +166,60 @@ void level(BTNode *p) {
         }
     }
 }
+
+// 层次遍历求二叉树最大宽度
+typedef struct {
+    BTNode *p; //指向二叉树的结点的指针
+    int level; //保存结点的层数
+} queue;
+
+int maxWidth(BTNode *r) { //传入二叉树根节点
+    // 利用新定义的结构体初始化用于保存遍历结果的队列,采用结构体数组
+    queue que[maxsize];
+    int front, rear;
+    front = rear = 0;
+
+    int levNum = 0;
+    BTNode *s; //指向当前出队的结点的指针
+    if(r != NULL) {
+        // 根节点入队
+        ++rear; //假设队列长度足够，不采用循环队列
+        que[rear].p = r;
+        que[rear].level = 1; //根结点层数为1
+        
+        while(front != rear) {//队列未出队完成，循环继续
+            ++front; //根节点出队，注意只是访问，没有删除
+            s = que[front].p; //访问目的一，获取当前结点指针
+            levNum = que[front].level; //访问目的二，获取当前结点层数，以便给孩子层数赋值
+            
+            if(s->lchild != NULL) {
+                ++rear;
+                que[rear].p = s->lchild;
+                que[rear].level = levNum + 1;
+            }
+            if(s->rchild != NULL) {
+                ++rear;
+                que[rear].p = s->rchild;
+                que[rear].level = levNum + 1;
+            }
+        } // 循环结束，所有结点都保存在que数组中
+        // 开始找最大层数
+        int max = 0;
+        for(int i = 1; i <= levNum; ++i) { //循环每一层
+            int n = 0; //临时保存当前层的节点数
+            for(int j = 1; j <= rear; ++j) {
+                //该层循环从队首开始，一直走到队尾、
+                // 由于不知道每一层有多少个结点，因此只能遍历整个队列，确定是不是当前层的结点
+                if(que[j].level == i) { // 如果是当前层的
+                    ++n; //当前层结点数加一
+                }
+                if(n > max) {//如果当前层结点数超过目前确认的最大值，更新最大值
+                    max = n;
+                }
+            }
+        }
+        return max;
+    } else { //二叉树为空，返回宽度0
+        return 0;
+    }
+}
