@@ -223,3 +223,56 @@ int maxWidth(BTNode *r) { //传入二叉树根节点
         return 0;
     }
 }
+
+// 二叉树先序非递归遍历
+void preOrderNonrecursion(BTNode *bt) {
+    BTNode *stack[maxsize];
+    int top = -1;
+    
+    BTNode *p; //指向出栈将要访问的元素
+    if(bt != NULL) {
+        stack[++top] = bt; //根结点入栈
+
+        while(top != -1) {
+            p = stack[top--];
+            Visit(p);
+            if(p->rchild != NULL) {
+                stack[++top] = p->rchild;
+            }
+            if(p->lchild != NULL) {
+                stack[++top] = p->lchild;
+            }
+        }
+    }
+}
+
+// 二叉树中序非递归遍历
+//访问顺序是结点的左子树，结点，结点的右子树
+//栈的实现思路是结点入栈，接着左子树入栈，一直走到没有左子树的时候
+void midOrderNonrecursion(BTNode *bt) {
+    // 初始化保存结点的栈
+    BTNode *stack[maxsize];
+    int top = -1;
+    
+    BTNode *p; //用于指向将要入栈的结点
+    p = bt;
+    if(bt != NULL) {
+        //开始循环遍历
+        //只要栈非空，循环继续
+        //只要p还指向结点，循环继续
+        while(top != -1 || p != NULL) {
+            //下面的循环用于入栈左子树及其祖先结点
+            while(p != NULL) { //只要左子树还存在，循环继续
+                stack[++top] = p;
+                p = p->lchild;
+            }
+            //到达左下角叶子结点，左子树不存在，跳出上面的循环
+            p = stack[top]; //获取当前栈顶结点
+            top--; //栈顶出栈
+            Visit(p); //访问刚出栈结点
+            //刚出栈结点可能只是某结点的左孩子，自己没有孩子，则算访问左子树，则下面语句将指向空，下一个循环会继续出栈访问它的根节点
+            //还有一种情况，刚出栈结点还有右孩子，则此次算访问它的右孩子的根节点，下面语句将把右孩子入栈待访问
+            p = p->rchild;
+        }
+    }
+}
