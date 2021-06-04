@@ -276,3 +276,34 @@ void midOrderNonrecursion(BTNode *bt) {
         }
     }
 }
+
+// 二叉树后序非递归遍历
+//基本思路：在先序遍历中，交换左右结点入栈顺序，得到的序列为逆后序
+//出栈后即入新栈，再出栈则将逆后序转为后序
+void postOrderNonrecursion(BTNode *bt) {
+    BTNode *stack1[maxsize]; int top1 = -1; //用于遍历二叉树
+    BTNode *stack2[maxsize]; int top2 = -1; //用于保存stack1的出栈元素，实现求逆
+    BTNode *p;
+
+    if(bt != NULL) {
+        stack1[++top1] = bt;
+
+        while(top1 != -1) {
+            p = stack1[top1--]; //p指向栈顶，出栈
+            stack2[++top2] = p; //stack2顺势入栈stack1的出栈元素
+
+            //先入左，则出栈可先出右孩子
+            if(p->lchild != NULL) {
+                stack1[++top1] = p->lchild;
+            }
+            if(p->rchild != NULL) {
+                stack2[++top2] = p->rchild;
+            }
+        } //二叉树遍历完毕，跳出循环
+
+        while(top2 != -1) { //stack2依次出栈方法，实现后序访问
+            p = stack2[top2--];
+            Visit(p);
+        }
+    }
+}
