@@ -307,3 +307,30 @@ void postOrderNonrecursion(BTNode *bt) {
         }
     }
 }
+
+// 二叉树线索化结构体定义
+typedef struct TBTNode{
+    char data;
+    int lTag, rTag; //为0则有左或右孩子，为1则左右指针指向该序列遍历方式的前驱，后继
+    TBTNode *lchild, *rchild;
+} TBTNode;
+
+// 二叉树中序线索化
+void inThread(TBTNode *p, TBTNode *&pre) { // pre指针指向当前p结点的上一个访问结点，访问的第一个结点没有前驱，故初始值为null
+    if(p != NULL) {
+        inThread(p->lchild, pre);
+
+        //p的左指针指向可线索化的前驱
+        if(p->lchild == NULL) {
+            p->lchild = pre;
+            p->lTag = 1;
+        }
+        //可线索化的前驱的右指针指向当前p
+        if(pre != NULL && pre->rchild == NULL) {
+            pre->rchild = p;
+            pre->rTag = 1;
+        }
+        pre = p;
+        inThread(p->rchild, pre);
+    }
+}
