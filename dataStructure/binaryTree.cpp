@@ -315,7 +315,7 @@ typedef struct TBTNode{
     TBTNode *lchild, *rchild;
 } TBTNode;
 
-// 二叉树中序线索化
+// 二叉树中序遍历线索化
 void inThread(TBTNode *p, TBTNode *&pre) { // pre指针指向当前p结点的上一个访问结点，访问的第一个结点没有前驱，故初始值为null
     if(p != NULL) {
         inThread(p->lchild, pre);
@@ -326,11 +326,103 @@ void inThread(TBTNode *p, TBTNode *&pre) { // pre指针指向当前p结点的上
             p->lTag = 1;
         }
         //可线索化的前驱的右指针指向当前p
-        if(pre != NULL && pre->rchild == NULL) {
+        if(pre != NULL && pre->rchild == NULL) { //其中pre!=null处理初始情况，即第一个结点没有前驱，pre此时为空，不需要建立右孩子线索化
             pre->rchild = p;
             pre->rTag = 1;
         }
         pre = p;
         inThread(p->rchild, pre);
     }
+}
+
+// 利用中序遍历线索化建立中序线索二叉树
+void createInThread(TBTNode *root) {
+    TBTNode *pre = NULL; //初始pre指向空
+    inThread(root, pre);
+    //在inThread函数中，初次访问的结点左孩子为空时，处理方法是左指针指空，左tag标出，为实现对二叉树中所有空指针的统一处理，现对序列最后一个结点处理
+    //线索化完最后一个结点后，pre便指向了它
+    pre->rchild = NULL;
+    pre->rTag = 1;
+}
+
+// 找出中序线索二叉树序列第一个访问的结点
+TBTNode* First(TBTNode *p) { //传入的p为根结点
+    //要找的结点应在左下角，第一个左孩子为空的结点
+    while(p->lchild != NULL) { //或者用p->lTag == 0，未被线索化就是左孩子不为空
+        p = p->lchild;
+    }
+    //此时p的左孩子为空，满足条件，跳出循环
+    return p;
+}
+
+// 找出中序线索二叉树序列某结点的下一个结点
+TBTNode *Next(TBTNode *p) {
+    if(p->rTag == 0) {
+        return First(p->rchild);//访问完p之后接下来访问它的右子树，右子树第一个访问的就是p的后继
+    } else {
+        return p->rchild;
+    }
+}
+
+// 找出中序二叉树序列最后一个访问的结点
+TBTNode *Last(TBTNode *p) {
+    //要找的结点在右下角，第一个右孩子为空的结点
+    while(p->rchild != NULL) {
+        p = p->rchild;
+    }
+    return p;
+}
+
+// 找出中序二叉树序列某节点的前驱
+TBTNode *Prior(TBTNode *p) {
+    if(p->lTag == 0) {
+        return Last(p->lchild); //中序访问完p的左子树才来访问p,所以前驱是左子树最后一个访问的结点
+    }
+}
+
+// 对中序线索二叉树进行遍历并访问
+void InOrder(TBTNode *root) {
+    for(TBTNode *p = First(root); p != NULL; p = Next(p)) {
+        // 此处填写访问代码
+    }
+}
+
+// 二叉树前序线索化
+void preThread(TBTNode *p, TBTNode *&pre) {
+    if(p != NULL) {
+        //前序先访问根结点，故先对根结点进行线索化
+        if(p->lchild == NULL) { 
+            p->lchild = pre;
+            p->lTag = 1;
+        }
+        if(pre != NULL && pre->rchild == NULL) {
+            pre->rchild = p;
+            pre->rTag = 1;
+        }
+        //此时p和其前驱线索化完成，当前的p将成为满足条件要访问的结点的前驱，故改变pre,让其指向当前的p;
+        pre = p;
+        if(p->lTag == 0){ //考虑到如果当前结点的左孩子已经被线索化，再递归其左孩子便回到当前结点的前驱，陷入死循环，故应该对其是否左线索化判断
+            preThread(p->lchild, pre);
+        }
+        if(p->rTag == 0) { //若当前p的右孩子已经被线索化，那直接递归也会进入死循环
+            preThread(p->rchild, pre);
+        }   
+    }
+}
+
+// 二叉树后序线索化
+void postThread(TBTNode *p, TBTNode *&pre) {
+    if(p != NULL) {
+        postThread(p->lchild, pre);
+        postThread(p->rchild, pre);
+        if(p->lchild == NULL) {
+            p->lchild = pre;
+            p->lTag = 1;
+        }
+        if(pre->rchild == NULL && pre != NULL) {
+            pre->rchild = p;
+            pre->rTag = 1;
+        }
+        pre = p;
+    }   
 }
