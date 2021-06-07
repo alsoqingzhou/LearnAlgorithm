@@ -410,6 +410,28 @@ void preThread(TBTNode *p, TBTNode *&pre) {
     }
 }
 
+// 线索二叉树访问函数
+void VisitTBT(TBTNode *p) {
+    cout <<p->data<<endl;
+}
+
+// 前序线索化二叉树的遍历
+void preOrder(TBTNode *root) {
+    if(root != NULL) {
+        TBTNode *p = root;
+        if(p != NULL) {
+            while(p->lTag == 0) { //如果当前结点未被线索化
+                VisitTBT(p); //先序先访问当前结点，然后跳转左孩子
+                p = p->lchild;
+            }
+            VisitTBT(p);//当前结点以被线索化，先访问之
+            p = p->rchild; //然后直接跳转右孩子
+            // 此时的右孩子，要么被线索化了，则跳转到当前结点的后继结点
+            // 要么没有被线索化，则当前结点没有左孩子（线索化后的左孩子指向前驱），那访问完当前结点后只能访问右孩子
+        }
+    }
+}
+
 // 二叉树后序线索化
 void postThread(TBTNode *p, TBTNode *&pre) {
     if(p != NULL) {
