@@ -347,8 +347,8 @@ void createInThread(TBTNode *root) {
 
 // 找出中序线索二叉树序列第一个访问的结点
 TBTNode* First(TBTNode *p) { //传入的p为根结点
-    //要找的结点应在左下角，第一个左孩子为空的结点
-    while(p->lchild != NULL) { //或者用p->lTag == 0，未被线索化就是左孩子不为空
+    //要找的结点应在左下角，第一个左孩子为空的结点,该结点的的标志是第一个被线索化的
+    while(p->lTag == 0) { //或者写p->lChild != null, 第一个被线索化的结点，因为没有前驱，其左孩子为空
         p = p->lchild;
     }
     //此时p的左孩子为空，满足条件，跳出循环
