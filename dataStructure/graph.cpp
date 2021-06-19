@@ -1,5 +1,6 @@
 #include <stdio.h>
 const int maxsize = 10010;
+const int IFN = 100;
 
 // 图的顺序存储结构体定义——利用邻接矩阵
 typedef struct {
@@ -51,7 +52,7 @@ void DFS(AGraph *G, int v) {//第一个参数是某个图的指针，第二个�
 // 基于邻接表的图的广度优先遍历
 void BFS(AGraph *G, int v, int visit[maxsize]) {
     ArcNode *p; //指向边的指针
-    int que[maxsize], front = rear = 0; //定义队列，依次入队某个结点未访问的邻接点
+    int que[maxsize], front = 0, rear = 0; //定义队列，依次入队某个结点未访问的邻接点
     int j; //保存出队的结点在顶点数组中的下表
 
     Visit(v); //访问开始的第一个结点
@@ -73,6 +74,55 @@ void BFS(AGraph *G, int v, int visit[maxsize]) {
                 que[rear] = p->adjVex;
             }
             p = p->nextArc;
+        }
+    }
+}
+
+// Prim算法得到图的最小生成树
+void prim(MGraph g, int v0, int &sum) {
+    int lowCost[maxsize]; //权值数组，记录当前生成树到图中各结点边的距离
+    int vset[maxsize]; //处理标记数组，记录图中结点是否并入树中
+    int min; //记录更新的权值数组中最小值
+    int k; //记录权值数组中最小值对应的结点
+    int v; //记录刚并入树的结点
+
+    // 处理初始结点v0
+    v = v0; //初始结点入树
+    vset[v0] = 1;
+    sum = 0; //单结点树没有边，权值为0
+    
+    // 辅助数组初始化
+    for(int i = 0; i < g.n; ++i) {
+        lowCost[i] = g.edges[v0][i]; //当前各结点最小权值即初始结点v0到i的边权值
+        vset[i] = 0; //各结点均没有并入生成树，此时为空树
+    }
+
+    //最外层循环，共n-1次，处理初始结点外的剩余结点
+    for(int i = 0; i < g.n-1; ++i) {
+
+        //首先找出到树的边中权值最小的，并入当前最小生成树
+        //意味着循环遍历最新的权值数组，确定其中的最小值min
+        min = IFN; //初始最小值IFN，准备更新
+        for(int j = 0; j < g.n; ++j) {
+            //理想结点既没有并入生成树中，同时还是最小值，满足以上两个条件
+            if(vset[j] == 0 && lowCost[j] < min) {
+                min = lowCost[j];
+                k = j;
+            }
+        } //跳出循环，此时min对应权值数组中最小值，k指向对应结点
+
+        vset[k] = 1; //并入生成树中
+        v = k; //标记新并入结点
+        sum += min;
+
+        // 更新权值数组
+        for(int j = 0; j < g.n; j++) {
+            //对这样的结点对应的权值数组值进行更新
+            // 既没有并入生成树中
+            // 同时满足上面新入树的结点v到遍历到的结点j的边的距离小于生成树到结点j的距离
+            if(vset[j] == 0 && g.edges[v][j] < lowCost[j]) {
+                lowCost[j] = g.edges[v][j];
+            }
         }
     }
 }
