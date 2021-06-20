@@ -126,3 +126,46 @@ void prim(MGraph g, int v0, int &sum) {
         }
     }
 }
+
+
+// Kruskal算法
+typedef struct { // 定义图的边存储方式的结构体
+    int a, b; //构成一条边的两个结点
+    int w; //边的权重
+} Rood;
+
+Rood rood[maxsize]; //Rood结构体数组
+int v[maxsize]; //并查集数组,输入结点，输出父结点
+
+int getRoot(int p) {
+    while(p != v[p]) { //父结点不是自身，即没有找到根结点，继续
+        p = v[p]; //p指向其父结点
+    }
+    return p; //找到根结点，返回
+}
+
+void sort(Rood rood[], AGraph g) {
+    //根据边的权值升序
+}
+
+void Kruskal(AGraph g, Rood rood[], int &sum) {
+    sum = 0; //最小生成树权值累加
+
+    //并查集初始化
+    for(int i = 0; i < g.n; ++i) {
+        v[i] = i; //此时每个结点都是根结点
+    }
+
+    sort(rood, g);
+
+    // 对图中的所有边循环
+    for(int i = 0; i < g.e; ++i) {
+        int a = getRoot(rood[i].a); //边i一端的结点的根结点
+        int b = getRoot(rood[i].b); //边i另一端的结点的根结点
+
+        if(a != b) { //根结点不同，两个结点不在同一棵树
+            v[a] = b; //并查集上合并a和b所在的两棵树
+            sum += rood[i].w; //生成树权值累加
+        }
+    }
+}
