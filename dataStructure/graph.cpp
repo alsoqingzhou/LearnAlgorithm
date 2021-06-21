@@ -171,9 +171,9 @@ void Kruskal(AGraph g, Rood rood[], int &sum) {
 }
 
 /*Dijkstra 算法*/
-void Dijkstra(MGraph g, int v) { //传入参数有图以及开始结点
-    int Dist[maxsize]; //当前从开始顶点到图中其余顶点的最短距离长度
-    int path[maxsize]; //最短路径上结点的前驱
+void Dijkstra(MGraph g, int v, int path[], int Dist[]) { //传入参数有图以及开始结点
+    // int Dist[maxsize]; //当前从开始顶点到图中其余顶点的最短距离长度
+    // int path[maxsize]; //最短路径上结点的前驱
     int set[maxsize]; //标记结点是否并入最短路径
 
     // 初始化
@@ -200,7 +200,7 @@ void Dijkstra(MGraph g, int v) { //传入参数有图以及开始结点
         set[u] = 1; //将选出的结点并入最短路径
 
         for(int j = 0; j < g.n; ++j) { //该层循环根据新并入结点得到最短路径更新Dist,并确定path
-            if(set[j] == 0 && Dist[u] + g.edges[u][j] < Dist[j]) { //通过新并入结点到达j的路径小于不通过其到达j的话
+            if(set[j] == 0 && Dist[u] + g.edges[u][j] < Dist[j]) { //通过新并入结点到达j的路径小于不通过其到达j的路径长度
                 Dist[j] = Dist[u] + g.edges[u][j];
                 path[j] = u;
             }
