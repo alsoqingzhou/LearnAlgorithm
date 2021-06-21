@@ -128,7 +128,7 @@ void prim(MGraph g, int v0, int &sum) {
 }
 
 
-// Kruskal算法
+/*Kruskal算法*/
 typedef struct { // 定义图的边存储方式的结构体
     int a, b; //构成一条边的两个结点
     int w; //边的权重
@@ -166,6 +166,44 @@ void Kruskal(AGraph g, Rood rood[], int &sum) {
         if(a != b) { //根结点不同，两个结点不在同一棵树
             v[a] = b; //并查集上合并a和b所在的两棵树
             sum += rood[i].w; //生成树权值累加
+        }
+    }
+}
+
+/*Dijkstra 算法*/
+void Dijkstra(MGraph g, int v) { //传入参数有图以及开始结点
+    int Dist[maxsize]; //当前从开始顶点到图中其余顶点的最短距离长度
+    int path[maxsize]; //最短路径上结点的前驱
+    int set[maxsize]; //标记结点是否并入最短路径
+
+    // 初始化
+    for(int i = 0; i < g.n; ++i) {
+        Dist[i] = g.edges[v][i]; //dist初始化为v到各边的距离
+        set[i] = 0;
+        if(g.edges[v][i] < IFN) {
+            path[i] = v;
+        } else {
+            path[i] = -1;
+        }
+    }
+
+    for(int i = 0; i < g.n-1; ++i) { //该层循环对除开始结点外所有结点循环，并入最短路径
+        int min = IFN; //记录最短路径的距离
+        int u; //记录刚并入最短路径的结点
+
+        for(int j = 0; j < g.n; ++j) { //该层循环找出当前没有并入最短路径的剩余结点中距离最短的
+            if(set[i] == 0 && Dist[i] < min) {
+                min = Dist[i];
+                u = j;
+            }
+        }
+        set[u] = 1; //将选出的结点并入最短路径
+
+        for(int j = 0; j < g.n; ++j) { //该层循环根据新并入结点得到最短路径更新Dist,并确定path
+            if(set[j] == 0 && Dist[u] + g.edges[u][j] < Dist[j]) { //通过新并入结点到达j的路径小于不通过其到达j的话
+                Dist[j] = Dist[u] + g.edges[u][j];
+                path[j] = u;
+            }
         }
     }
 }
