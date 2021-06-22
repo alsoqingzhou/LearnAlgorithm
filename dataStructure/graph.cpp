@@ -207,3 +207,35 @@ void Dijkstra(MGraph g, int v, int path[], int Dist[]) { //传入参数有图以
         }
     }
 }
+
+// Floyd 算法求图中任意两点之间最短路径
+void Floyd(MGraph g, int Path[][maxsize], int A[][maxsize]) {
+    // 初始化
+    for(int i = 0; i < g.n; ++i) {
+        for(int j = 0; j < g.n; ++j) {
+            Path[i][j] = -1;  //path初始化为-1，表示任意两个结点之间没有中间点
+            A[i][j] = g.edges[i][j]; //A初始化为邻接矩阵的边权值，用于保存两结点之间最短路径长度
+        }
+    }
+
+    for(int k = 0; k < g.n; ++k) { //该层循环选取每个结点为中间点
+        for(int i = 0; i < g.n; ++i) { //该层循环与下一层遍历图中每一对边
+            for(int j = 0; j < g.n; ++j) {
+                if(A[i][j] > A[i][k] + A[k][j]) {
+                    A[i][j] = A[i][k] + A[k][j]; //经过中间点的路径更短，更新i与j之间路径距离
+                    Path[i][j] = k; //i与j之间中间点为k
+                }
+            }
+        }
+    }
+}
+//输出从结点u到结点v的最短路径
+void printPath(int Path[][maxsize], int u, int v) {
+    if(Path[u][v] = -1) { //两结点之间没有中间点
+        // 直接输出
+    } else {
+        mid = Path[u][v];
+        printPath(u, mid, Path); //递归输出起点到中间点的最短路径
+        printPath(mid, v, Path); //递归输出中间点到终点的最短路径
+    }
+}
