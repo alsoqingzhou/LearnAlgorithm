@@ -22,6 +22,7 @@ typedef struct ArcNode {
 }ArcNode; //边表结点定义
 typedef struct {
     char data; //顶点信息
+    int count; //记录图中该结点的入度，用于拓扑排序
     ArcNode *firstArc; //指向第一条边
 }VNode; //顶点表结点定义
 typedef struct {
@@ -31,7 +32,6 @@ typedef struct {
 
 //基于邻接表的图的深度优先遍历
 int visit[maxsize]; //该数组用于标记图中的某个结点是否已经访问过
-
 void Visit(int v) {
     printf("%d", v);
 }
@@ -237,5 +237,40 @@ void printPath(int Path[][maxsize], int u, int v) {
         mid = Path[u][v];
         printPath(u, mid, Path); //递归输出起点到中间点的最短路径
         printPath(mid, v, Path); //递归输出中间点到终点的最短路径
+    }
+}
+
+// 拓扑排序
+int topoSort(AGraph g) {
+    int n; //记录拓扑排序形成的序列个数
+    ArcNode *p; //指向边的指针p
+    int stack[maxsize], top = -1; //初始化栈，入度为0的结点入栈
+
+    for(int i = 0; i < g.n; ++i) {
+        if(g.adjlist[i].count == 0) { //遍历找出邻接表存储的图中入度为0的唯一结点
+            stack[++top] = i;
+        }
+    }
+
+    while(top != -1) {
+        int i = stack[top--]; //入度为0的结点出栈
+        ++n; //计数器加一
+        p = g.adjlist[i].firstArc; //指针p指向i的第一条边
+
+        // 接下来的循环对i的每一条边对应的结点入度减一，发现入度为0的结点就入栈
+        while(p != NULL) { //遍历i的每一条边
+            int j = p->adjVex; //j保存边对应的结点
+            --(g.adjlist[j].count); //j入度减一
+            if(g.adjlist[j].count == 0) { //如果减完j入度为0，入栈
+                stack[++top] = j;
+            }
+            p = p->nextArc; //p指向下一条边
+        }
+    }
+
+    if(n == g.n) {
+        return 1; //拓扑排序得到的序列数等于结点数，说明所有结点都可以拓扑排序
+    } else {
+        return 0;
     }
 }
