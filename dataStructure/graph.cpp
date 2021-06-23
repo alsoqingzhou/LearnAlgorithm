@@ -230,11 +230,11 @@ void Floyd(MGraph g, int Path[][maxsize], int A[][maxsize]) {
     }
 }
 //输出从结点u到结点v的最短路径
-void printPath(int Path[][maxsize], int u, int v) {
+void printPath(int u, int v, int Path[][maxsize]) {
     if(Path[u][v] = -1) { //两结点之间没有中间点
         // 直接输出
     } else {
-        mid = Path[u][v];
+        int mid = Path[u][v];
         printPath(u, mid, Path); //递归输出起点到中间点的最短路径
         printPath(mid, v, Path); //递归输出中间点到终点的最短路径
     }
