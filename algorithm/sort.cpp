@@ -38,8 +38,33 @@ void BubbleSort(int R[], int n) {
     }
 }
 
+// 快速排序
+void QuickSort(int R[], int low, int high) { //low及其左侧都是小于等于枢轴的数，high及其右侧都是大于等于枢轴的数
+    int temp; //保存每趟循环的枢轴值
+    int left = low, right = high; //用left和right记录初始的low和high的位置，方便后期递归
+
+    if(low < high) { //如果刚进入函数是low = high, 则说明本次递归的序列枢轴一边只剩一个数字，则无需排序，跳出这一侧的递归
+        //满足本次递归函数的条件，准备开始本轮排序
+        temp = R[low]; //temp暂存枢轴值
+
+        while(low < high) {//该层循环完成一趟选择排序，使得枢轴左边都是小于等于的数，右边都是大于等于的数
+            //该循环寻找比枢轴小的数值
+            while(low < high && R[high] >= temp) {--high;} //跳出循环，找到比枢轴小的数值
+            R[low] = R[high]; //安放到low位置
+
+            //该循环寻找比枢轴大的数值
+            while(low < high && R[low] <= temp) {++low;} //跳出循环，找到比枢轴大的数值
+            R[high] = R[low];
+        }
+        // 跳出循环，low和high相遇，此位置是枢轴位置
+        R[low] = temp;
+        QuickSort(R, left, low-1); //对枢轴左侧数字快排
+        QuickSort(R, high+1, right); //对枢轴右侧数字快排
+    }   
+}
+
 int main() {
-    BubbleSort(R, 10);
+    QuickSort(R, 0, 9);
     for(int i = 0; i < 10; ++i) {
         cout<< R[i] <<endl;
     }
