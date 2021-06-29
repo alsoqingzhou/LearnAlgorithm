@@ -117,6 +117,40 @@ void HeapSort(int R[], int len) { //len为结点总数，即数组内元素个�
     }
 }
 
+// 二路归并排序
+int A[]; int n = 10; //n为将要归并排序的A数组的长度
+void merge(int A[], int low, int mid, int high) {
+    int *B = (int *)malloc(n * sizeof(int)); //辅助数组B
+
+    for(int i = low; i <= high; ++i) {
+        B[i] = A[i]; //该循环将A从low到high这需要归并的连续两部分的全部复制一份到辅助数组
+    }
+
+    // 下面的循环从i开始以及j开始的两路中选择较小的排入A中
+    int i, j, k;
+    for(i = low, j = mid+1, k = i; i <= mid && j <= high; ++k) {
+        if(B[i] <= B[j]) {
+            A[k] = B[i++]; //排进较小的，被排走数组的指针加一
+        } else {
+            A[k] = B[j++];
+        }
+    }
+
+    while(i <= mid) {
+        A[k++] = B[i++];
+    }
+    while(j <= high) {
+        A[k++] = B[j++];
+    }
+}
+void mergeSort(int A[], int low, int high) {
+    if(low < high) {
+        int mid = (low + high) / 2;
+        mergeSort(A, low, mid); //对左边进行二路归并排序
+        mergeSort(A, mid+1, high); //对右边进行二路归并排序
+        merge(A, low, mid, high); //将上面排序好的两路归并
+    }
+}
 
 int main() {
     HeapSort(R, 10);
