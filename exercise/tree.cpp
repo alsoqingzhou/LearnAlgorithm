@@ -48,3 +48,38 @@ void postNone(BTNode* bt) {
         visit(p);
     }
 }
+
+// Q5.3.3-4 层次遍历从下至上，从右向左
+// 基本思想：用循环队列保存正常层次遍历结点，出队后即入栈，然后全部出栈，实现正常层次遍历的反转结果
+void reverseLevel(BTNode *bt) {
+    BTNode *que[maxsize];
+    int front = 0, rear = 0;
+    BTNode *q;
+
+    BTNode *stack[maxsize];
+    int top = -1;
+
+    if(bt != NULL) {
+        rear = (rear+1) % maxsize;
+        que[rear] = bt; //根结点入队
+
+        while(front != rear) { //只要队列不空，循环继续
+            front = (front + 1) % maxsize;
+            q = que[front];
+            stack[++top] = q;
+
+            if(q->lchild != NULL) {
+                rear = (rear + 1) % maxsize;
+                que[rear] = q->lchild;
+            }
+            if(q->rchild != NULL) {
+                rear = (rear + 1) % maxsize;
+                que[rear] = q->rchild;
+            }
+        } //所有结点入栈，跳出循环
+
+        while(top != -1) {
+            visit(stack[top--]);
+        }
+    }
+}
