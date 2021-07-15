@@ -59,3 +59,40 @@ void deleteAllX(SSqList &l, int x) {
     // 跳出循环，删减完毕
     l.length = k; //更新顺序表长度
 }
+
+// Q2.2.3-4 从有序顺序表中删除s到t之间元素
+bool del_s_t(SSqList &l, int s, int t) {
+    if(s > t || l.length == 0) {
+        return false;
+    }
+
+    int i, j;
+    for(i = 0; i < l.length&&l.data[i] < s; ++i); //i标记第一个大于s的位置，从此开始删除
+    if(i == l.length) {
+        return true; //没有位于s,t之间的元素
+    }
+    for(j = i; j < l.length&&l.data[j] <= t; ++j) //j标记第一个大于t的位置，从此开始保留
+
+    for(; j < l.length; ++i, ++j) {
+        l.data[i] = l.data[j];
+    }
+    l.length = i;
+    return true;
+}
+
+// Q2.2.3-5 从顺序表中删除s到t之间的元素
+bool delete_s_t(SSqList &l, int s, int t) {
+    int k = 0; //k记录要删除的元素个数
+    if(s > t || l.length == 0) {
+        return false;
+    }
+    for(int i = 0; i < l.length; ++i) {
+        if(s <= l.data[i] <= t) {
+            ++k;
+        } else {
+            l.data[i-k] = l.data[i];
+        }
+    }
+    l.length = l.length - k;
+    return true;
+}
