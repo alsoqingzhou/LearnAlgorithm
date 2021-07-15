@@ -96,3 +96,22 @@ bool delete_s_t(SSqList &l, int s, int t) {
     l.length = l.length - k;
     return true;
 }
+
+// Q2.2.3-6 从有序表中删除相同元素
+bool deleteSame(SSqList &l) {
+    int k = l.data[0]; //k跟踪表中元素是否变化
+    int i, j = 0; //i是循环指针，j记录重复元素总个数
+    if(l.length == 0) {
+        return false;
+    }
+    for(i = 1; i < l.length; ++i) {
+        if(l.data[i] == k) {
+            ++j;
+        } else {
+            k = l.data[i];
+            l.data[i-j] = l.data[i];
+        }
+    }
+    l.length -= j;
+    return true;
+}
