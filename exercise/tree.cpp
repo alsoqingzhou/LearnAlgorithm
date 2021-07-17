@@ -83,3 +83,32 @@ void reverseLevel(BTNode *bt) {
         }
     }
 }
+
+// Q5.3.3-5 非递归求二叉树高度
+int treeHight(BTNode *bt) {
+    int level; //记录二叉树遍历过程的层数
+
+    BTNode *que[maxsize];
+    int front = -1, rear = -1; //初始化遍历队列
+    int last = 0; //指向每一层最右侧结点指针
+
+    BTNode *p; //用于遍历二叉树
+
+    que[++rear] = bt; //根结点入队
+
+    while(front != rear) {
+        p = que[++front];
+        if(p->lchild != NULL)  {
+            que[++rear] = p->lchild;
+        }
+        if(p->rchild != NULL) {
+            que[++rear] = p->rchild;
+        }
+        if(front == last) { //到达该层最右端结点
+            ++level; //层数加一
+            last = rear; //last指向下一层最右端
+        }
+    }
+
+    return level;
+}
