@@ -29,3 +29,30 @@ void doubleBubbleSort(int a[], int n) {
         ++low;
     }
 }
+
+// Q8.3.3-2 顺序表奇偶数分离
+// 实现思想：顺序存储，表头表尾两个指针，表头指针及其左边都是奇数，表尾指针及其右边都是偶数
+// 参考快速排序的枢轴划分，利用两个指针划分
+typedef struct {
+    int *a;
+    int length;
+} SSTable;
+
+void paritySep(SSTable st) {
+    int temp = st.a[0]; //空出第一个位置
+    int i = 0, j = st.length-1;
+    while(i != j) {
+        while(st.a[j] % 2 == 0) {
+            --j; //是偶数，j指针前移
+        }//遇到奇数，跳出循环，处理奇数
+        st.a[i] = st.a[j];
+        ++i;
+
+        while(st.a[i] % 2 == 1) {
+            ++i; //是奇数，i指针后移
+        }//遇到偶数，跳出循环处理
+        st.a[j] = st.a[i];
+        --j;
+    }//i和j相遇，跳出循环
+    st.a[i] = temp;
+}
