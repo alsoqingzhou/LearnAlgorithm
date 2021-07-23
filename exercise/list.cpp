@@ -115,3 +115,42 @@ bool deleteSame(SSqList &l) {
     l.length -= j;
     return true;
 }
+
+// Q2.2.3-7 合并两个有序表得到一个新的有序表
+    // 算法思想：划出一块两个表长之和的空间给新表，两个指针遍历两个表，选取小的纳入新表
+void mergeTwo(SSqList a, SSqList b, SSqList &c) { //c为新表，传入引用类型
+    int i = 0, j = 0, k = 0;
+    while(i < a.length && j < b.length) {
+        while(a.data[i] <= b.data[j]) {
+            c.data[k] = a.data[i];
+            ++i;
+            ++k;
+        }
+        while(b.data[j] < a.data[i]) {
+            c.data[k] = b.data[j];
+            ++j;
+            ++k;
+        }
+    } //其中某个表传完，跳出循环，剩下的表接上
+    while(i < a.length) {
+        c.data[k] = a.data[i];
+        ++i; ++k;
+    }
+    while(j < b.length) {
+        c.data[k] = b.data[j];
+        ++j; ++k;
+    }
+}
+
+// Q2.2.3-8 长数组中交换两个子线性表的位置，从a1-am,b1-bn变为b1-bn,a1-am
+// 算法思想，整个数组反转，前n个元素表反转，后m个元素表反转
+void reverseRange(SSqList &l, int a, int b) {
+    while(a < b) {
+        swap(l.data[a++], l.data[b--]);
+    }
+}
+void reverseAB(SSqList a, int m, int n) {
+    reverseRange(a, 0, a.length-1);
+    reverseRange(a, 0, n-1);
+    reverseRange(a, n, m-1);
+}
