@@ -58,3 +58,41 @@ int IsSymmetry(LinkList *l, int n) { //传入参数为单链表头结点和链�
     //走出循环，说明中心对称
     return 1;
 }
+
+// Q3.1.4-5 实现共享栈
+// 算法思想：两个栈共享一片连续空间，两个栈栈顶位于两端，栈顶相对
+typedef struct {
+    int elem[maxsize];
+    int top[2];
+} shareStack;
+shareStack st;
+
+int push(int stNum, int x) {
+    // 首先判断栈是否已满
+    if(st.top[1] - st.top[0] == 1)  {
+        return 0; //stack is full
+    }
+    switch(stNum) {
+        case 0: st.elem[++st.top[0]] = x; return 1; break;
+        case 1: st.elem[++st.top[1]] = x; return 1;
+    }
+}
+
+int pop(int stNum) {
+    switch(stNum) {
+        case 0: {
+            if(st.top[0] == -1) {
+                return 0; //stack 1 is empty
+            } else {
+                return st.elem[st.top[0]++];
+            }
+        }
+        case 1: {
+            if(st.top[1] == maxsize) {
+                return 0; //stack 2 is empty
+            } else {
+                return st.elem[st.top[1]++];
+            }
+        }
+    }
+}
