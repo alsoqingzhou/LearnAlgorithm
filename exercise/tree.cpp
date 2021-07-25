@@ -5,6 +5,7 @@ const int maxsize = 50;
 
 typedef struct BTNode{
     char info;
+    int data;
 
     struct BTNode *lchild;
     struct BTNode *rchild;
@@ -111,4 +112,31 @@ int treeHight(BTNode *bt) {
     }
 
     return level;
+}
+
+// Q5.3.3-6 由中序和先序遍历序列建立二叉链表
+// 算法思想：先序第一个元素为根结点，找到其在中序序列中位置，则其中序序列相应位置左右为其左右子树遍历序列，由此确定左右子树范围
+// 借助左右子树范围再去对应先序序列找出该段子树的根结点，然后再去对应中序确立左右子树，如此递归求解根结点的左右子树
+BTNode* treeCreat(int a[], int b[], int f1, int fn, int m1, int mn) { //依次传入先序，中序遍历数组，先序，中序首尾位置
+    BTNode* bt = (BTNode*)malloc(sizeof(BTNode));
+    bt->data = a[f1]; //根结点赋值
+
+    int i;
+    for(i = m1; b[i] != bt->data; ++i); //遍历中序序列寻找根结点
+    // 跳出循环，i为根结点位置
+    int left = i - m1; //左子树长度
+    int right = mn - i; //右子树长度
+
+    if(left != 0) { //有左子树
+        // 传入参数为左子树在先序，中序数组的起始，结束位置
+        bt->lchild = treeCreat(a, b, f1+1, f1+left, m1, m1+left-1); //该递归返回左子树中的根结点作为bt的左孩子
+    } else {
+        bt->lchild = NULL;
+    }
+    if(right != 0) {
+        bt->rchild = treeCreat(a, b, fn-right+1, fn, mn-right+1, mn);
+    } else {
+        bt->rchild = NULL;
+    }
+    return bt;
 }
