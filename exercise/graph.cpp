@@ -24,6 +24,11 @@ typedef struct {
     int edges[maxsize][maxsize];
 } MGraph; //图的邻接矩阵定义
 
+// 访问图的结点
+void Visit(VNode p) {
+    cout<<p.data<<endl;
+}
+
 //Q6.2.6-4 图的邻接表转换为邻接矩阵
 void trans(AGraph *g, MGraph *ng) {
     ArcNode *p; //用于遍历每条边的指针
@@ -63,5 +68,33 @@ bool isTree(AGraph *g) {
         return true;
     } else {
         return false;
+    }
+}
+
+// Q6.3.4-3 邻接表存储的图的深度优先搜索非递归算法
+void DFSNoneRecursion(AGraph *g, int visit[], int v) {
+    for(int i = 0; i < g->n; ++i) {
+        visit[i] = 0;
+    } //初始化访问数组
+    ArcNode* p; //用于遍历图中边
+    int stack[maxsize]; //保存要访问的顶点编号
+    int top = -1;
+
+    stack[++top] = v; //传入结点入栈
+    visit[v] = 1; //入栈即标记访问，避免再次入栈
+
+    while(top != -1) {
+        int r = stack[top--]; //栈顶出栈
+        Visit(g->adjList[r]); //访问栈顶对应结点
+
+        p = g->adjList[r].firstArc; //边指针指向结点的第一条边
+        while(p != NULL) {
+            if(visit[p->adjVex] == 0) {
+                stack[++top] = p->adjVex;
+                visit[p->adjVex] = 1;
+                
+                p = p->nextArc;
+            }
+        }
     }
 }
