@@ -23,8 +23,8 @@ int biSearch_recursive(SSTable st, int low, int high, int key) {
     return 0; //跳出循环，查找失败
 }
 
-// 线性表顺序检索算法优化：将每次查找到的元素提前一位
-// Q7.2.4
+// Q7.2.4-7线性表顺序检索算法优化：将每次查找到的元素提前一位
+// 算法思想：查找元素，找到与其前一个元素交换位置
 typedef struct linkList {
     int data;
     struct linkList *next;
