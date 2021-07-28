@@ -30,7 +30,7 @@ void doubleBubbleSort(int a[], int n) {
     }
 }
 
-// Q8.3.3-2 顺序表奇偶数分离
+// Q8.3.3-3 顺序表奇偶数分离
 // 实现思想：顺序存储，表头表尾两个指针，表头指针及其左边都是奇数，表尾指针及其右边都是偶数
 // 参考快速排序的枢轴划分，利用两个指针划分
 typedef struct {
@@ -55,4 +55,21 @@ void paritySep(SSTable st) {
         --j;
     }//i和j相遇，跳出循环
     st.a[i] = temp;
+}
+
+// Q8.3.3-4 快速排序枢轴随机产生
+int partition2(int a[], int low, int high) {
+    int rand_index = low + rand()%(high-low+1); //获得随机位置为枢轴
+    swap(a[rand_index], a[low]); //交换随机位置和数组开始位置
+
+    int pivot = a[low]; //获取枢轴值
+    int i = low; //i及其左边都是小于等于枢轴值的
+
+    for(int j = low+1; j <= high; ++j) { //遍历剩余所有位置，寻找小于枢轴的值
+        if(a[j] < pivot) { //找到小于枢轴的位置，交换到前面
+            swap(a[++i], a[j]); //++i得到的位置一定大于枢轴，将其与前方找到的小于枢轴值的位置交换
+        }
+    } //跳出循环，此时i停止的位置处的值也是小于枢轴的，加下来将这个位置与枢轴交换即可定下枢轴位置
+    swap(a[i], a[low]);
+    return i; //返回枢轴位置
 }
