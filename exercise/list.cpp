@@ -154,3 +154,33 @@ void reverseAB(SSqList a, int m, int n) {
     reverseRange(a, 0, n-1);
     reverseRange(a, n, m-1);
 }
+
+// Q2.2.3-9 查找，交换或插入
+int search_exchangeORinsert(SSqList a, int key) {
+    int low = 0, high = a.length-1, mid;
+    while(low <= high) {
+        int mid = (low + high) / 2;
+        if(a.data[mid] == key) { 
+            break;
+        }  else if(a.data[mid] < key) {
+            low = mid + 1;
+        } else if(a.data[mid] > key) {
+            high = mid - 1;
+        }
+    }
+    if(a.data[mid] == key && mid != a.length-1) { //找到且有后继元素，则交换
+        int temp = a.data[mid+1];
+        a.data[mid+1] = a.data[mid];
+        a.data[mid] = temp;
+        return;
+    } else if(a.data[mid] == key && mid == a.length-1) { //找到但没有后继
+        return 1; //直接返回   
+    } else if(low > high) { //查找失败，交换
+        int i;
+        for(i = a.length-1; i >= low; --i) {
+            a.data[i+1] = a.data[i];
+        }
+        a.data[i+1] = key;
+        return;
+    }
+}
