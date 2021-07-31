@@ -140,3 +140,35 @@ BTNode* treeCreat(int a[], int b[], int f1, int fn, int m1, int mn) { //依次�
     }
     return bt;
 }
+
+// Q5.3.3-7 判定一棵二叉树是否是完全二叉树
+// 算法思想：对给定二叉树进行层次遍历，一层层入队，空结点也入队，若出队遇到空结点且其后还有结点，则不是完全二叉树
+bool isTotalTree(BTNode *bt) {
+    BTNode *queue[maxsize];
+    int front = -1, rear = -1;
+    BTNode *q; //层次遍历指针
+
+    rear = (rear+1) % maxsize;
+    queue[rear] = bt; //根结点入队
+
+    while(front != rear) { //队列不空，一直出队
+        front = (front + 1) % maxsize;
+        q = queue[front];
+        if(q != NULL) { //结点不空，入队其左右孩子
+            rear = (rear + 1) % maxsize;
+            queue[rear] = q->lchild;
+            rear = (rear + 1) % maxsize;
+            queue[rear] = q->rchild;
+        } else { //q为空结点，检查队列中是否还剩余结点，有剩余则不是完全二叉树
+            while(front != rear) {
+                front = (front) % maxsize;
+                q = queue[front]; //出队
+                if(q != NULL) { 
+                    return false; //有非空结点，判断为非
+                }
+
+            }
+        }
+    } //跳出循环，完成对二叉树层次遍历
+    return true; //经过测验，为完全二叉树
+}
