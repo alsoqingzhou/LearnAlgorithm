@@ -96,3 +96,36 @@ int pop(int stNum) {
         }
     }
 }
+
+// Q3.2.5-1 循环队列利用标记位区分队空和队满，出队，入队算法
+// 队列结构体定义
+typedef struct{
+    int data[maxsize];
+    int front, rear;
+    int tag; //队空队满标记符，完成进队后重置为1，完成出队后重置为0
+} queue;
+void initQueue(queue &q) {
+    q.front = q.rear = 0;
+    q.tag = 0;//初始化队为空，类似刚出完队，故tag置0
+}
+
+bool enterQueue(queue &q, int x) {
+    if(q.front == q.rear && q.tag == 1) {
+        //tag为1说明前一次是入队，导致首尾相同，此时队满
+        return false; //入队失败
+    }
+    q.rear = (q.rear + 1) % maxsize;
+    q.data[q.rear] = x;
+    q.tag = 1; //入队完成置1
+    return true;
+}
+bool deleteQueue(queue &q, int x) {
+    if(q.front == q.rear && q.tag == 0) {
+        // tag为0，前一次出队导致的首尾相同，此时队空
+        return false;
+    }
+    q.front = (q.front + 1) % maxsize;
+    x = q.data[q.front];
+    q.tag = 0;
+    return true;
+}
