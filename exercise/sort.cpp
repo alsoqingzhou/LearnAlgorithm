@@ -73,3 +73,32 @@ int partition2(int a[], int low, int high) {
     swap(a[i], a[low]);
     return i; //返回枢轴位置
 }
+
+// Q8.3.3-5 找出数组中第k小的元素
+// 算法思想；对数组进行一趟快速排序，确定枢轴位置，判断该位置与k位置大小，不断缩短范围进行枢轴确定
+int partition(int a[], int low, int high) { //普通快速排序，确定一个枢轴
+    int temp = a[low];
+    while(low < high) {
+        while(a[high] > temp) --high;
+        a[low] = a[high]; ++low;
+
+        while(a[low] < temp) ++low;
+        a[high] = a[low]; --high;
+    } //跳出循环，low与high相遇，该位置即枢轴位置
+    a[low] = temp;
+    return low; //返回枢轴位置
+}
+int searchK(int a[], int n, int k) {
+    int low = 0, high = n-1; //两个指针分别指向数组首尾位置
+    while(low < high) {
+        int pole = partition(a, low, high);
+        if(pole == k) {
+            return a[pole];
+        } else if(pole < k) {
+            low = pole + 1;
+        } else {
+            high = pole - 1;
+        }
+    }
+    
+}
