@@ -184,3 +184,57 @@ int search_exchangeORinsert(SSqList a, int key) {
         return;
     }
 }
+
+// Q2.2.3-11 寻找两个升序序列的中位数
+// 算法思想：根据两个序列中长度确定中位数位置数值。两个指针分别从两个序列开始比较移动，同时设置一个计数器，有指针移动就加一
+// 注：下面代码适用于两个任意长度的序列，若两个序列等长，则不用考虑指针越界的情况
+int find_mid(int s1[], int s2[], int n1, int n2) {
+    int mid; //求中位数位置
+    if((n1 + n2) % 2 == 0) {
+        mid = (n1 + n2) / 2;
+    } else {
+        mid = (n1 + n2) / 2 + 1;
+    }
+
+    int i = 0, j = 0; //两个序列的指针
+    int k = 0; //计数器
+    int flag_i = 0, flag_j = 0; //指针移动标记
+
+    while(k != mid) {
+        flag_i = flag_j = 0;
+        if(s1[i] < s2[j] && i < n1 && j < n2) {
+            ++i;
+            ++k;
+            flag_i = 1;
+        } else if (s1[i] >= s2[j] && i < n1 && j < n2) {
+            ++j;
+            ++k;
+            flag_j = 1;
+        } else if (i >= n1 || j >= n2) {
+            break;
+        }
+    }
+
+    if(i >= n1) {
+        flag_j = 1;
+        while(k != mid) {
+            ++j;
+            ++k;
+        }
+    }
+    if(j >= n2) {
+        flag_j = 1;
+        while(k != mid) {
+            ++i;
+            ++k;
+        }
+    }
+
+    if(flag_i == 1) {
+        return i-1;
+    }
+    if(flag_j == 1) {
+        return j-1;
+    }
+
+}
