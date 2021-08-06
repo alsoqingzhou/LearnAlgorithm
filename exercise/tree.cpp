@@ -172,3 +172,26 @@ bool isTotalTree(BTNode *bt) {
     } //跳出循环，完成对二叉树层次遍历
     return true; //经过测验，为完全二叉树
 }
+
+// Q5.3.3-8 计算给定二叉树的双分支结点数
+// 算法思想：非递归遍历该二叉树，设置计数器，如果左右孩子都不为空，则计数器加一
+int tree_n2(BTNode *bt) {
+    BTNode* stack[maxsize];
+    int top = -1;
+    BTNode *p;
+
+    int k; //计数器
+
+    stack[++top] = bt;
+
+    while(top != -1) {
+        p = stack[top--];
+        if(p->lchild != NULL) {
+            stack[++top] = p->lchild;
+        }
+        if(p->rchild != NULL) {
+            stack[++top] = p->rchild;
+            ++k;
+        }
+    }
+}
