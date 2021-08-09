@@ -101,7 +101,7 @@ void DFSNoneRecursion(AGraph *g, int visit[], int v) {
 
 // Q6.3.4-4 基于DFS和BFS确定用邻接表存储的图中是否有vi到vj的路径，i!=j
 // 算法思想：广度优先，从i结点开始，每次结点出队时检查是否为j
-int DFSi_j(AGraph *g, int i, int j) {
+int BFSi_j(AGraph *g, int i, int j) {
     // 初始化队列，访问数组，遍历指针
     int que[maxsize]; int front = -1, rear = -1;
     int visit[maxsize];
@@ -133,3 +133,24 @@ int DFSi_j(AGraph *g, int i, int j) {
     return 0;
 }
 
+// 深度优先
+// 算法思想：深度优先搜索过程中，顺带上目标结点的位置，以及判断符，如果遍历到目标结点，说明有路径，从递归中返回
+int DFSi_j(AGraph *g, int i, int j, bool &path) {
+    int visit[maxsize];
+    ArcNode *p;
+
+    visit[i] = 1;
+    if(i == j) {
+        path = true;
+        return 1;
+    }
+
+    p = g->adjList[i].firstArc;
+    while(p != NULL) {
+        if(visit[p->adjVex] == 0 && !path) { //找到路径后依然会遍历完当前结点每一条边才会结束
+            // 用path可以控制找到路径后不再进入递归
+            DFSi_j(g, p->adjVex, j, path);
+        }
+        p = p->nextArc;
+    }
+}
