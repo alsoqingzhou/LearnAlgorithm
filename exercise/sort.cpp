@@ -102,3 +102,37 @@ int searchK(int a[], int n, int k) {
     }
     
 }
+
+// Q8.3.3-6 划分一个数组为两部分，两部分个数之差最小，两部分和最大
+// 算法思想：即寻找中位数（的前一位），即找出数组中第n/2向下取整个最小位置，利用上面的算法，将其中的k赋值
+int partition2(int a[], int low, int high) {
+    int temp = a[low];
+    while(low < high) {
+        while(a[high] > temp) --high;
+        a[low] = a[high]; ++low;
+
+        while(a[low] < temp) ++low;
+        a[high] = a[low]; --high;
+    } //跳出循环，low = high
+    a[low] = temp;
+    return low;
+}
+int divide(int a[], int low, int high, int n) {
+    int k = n / 2;
+    int i; //划分位置
+    int s1, s2; //两部分和
+    while(low < high) {
+        int pole = partition2(a, low, high);
+        if(pole == k) {
+            i = pole;
+            break;
+        } else if(pole < k) {
+            low = pole + 1;
+        } else {
+            high = pole - 1;
+        }
+    }
+    for(int j = 0; j < i; ++j) s1 += a[j];
+    for(int j = i; j < n; ++j) s2 += a[j];
+    return s2 - s1;
+}
