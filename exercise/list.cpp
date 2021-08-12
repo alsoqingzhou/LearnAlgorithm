@@ -238,3 +238,37 @@ int find_mid(int s1[], int s2[], int n1, int n2) {
     }
 
 }
+
+// Q2.2.3-12 寻找数组中的主元素
+int find_main(int a[], int n) {
+    int c; //记录可能的主元素数值
+    int num = 0; //计数器
+
+    for(int i = 0; i < n; ++i) {
+        if(num == 0) { //目前没有相同的数
+            c = a[i];
+            ++num;
+        } else {
+            if(c == a[i]) {
+                ++num;
+            } else {
+                --num;
+                c = a[i];
+            }
+        }
+    }
+
+    if(num > 0) {
+        num == 0;
+        for(int i = 0; i < n; ++i) {
+            if(a[i] == c) {
+                ++num;
+            }
+        }
+    }
+    if(num > n/2) {
+        return c;
+    } else {
+        return -1;
+    }
+}
