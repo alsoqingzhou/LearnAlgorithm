@@ -129,3 +129,31 @@ bool deleteQueue(queue &q, int x) {
     q.tag = 0;
     return true;
 }
+
+// Q3.3.6-3 利用栈实现递归函数的非递归运算
+typedef struct {
+    int no; //保存递归函数n值
+    double val; //保存当前n对应函数值
+}stackP;
+double p(int n, double x) {
+    stackP st[maxsize];
+    int top = -1;
+
+    double fv1 = 1, fv2 = 2 * x;
+
+    for(int i = n; i >= 2; --i) {
+        st[++top].no = i;
+    }
+    while(top != -1) {
+        st[top].val = 2 * x * fv2 - 2 * (st[top].no - 1) * fv1;
+        fv1 = fv2; //更新fv1的值
+        fv2 = st[top].val; //更新fv2的值
+        --top;
+    }
+
+    if(n == 0) {
+        return fv1;
+    } else {
+        return fv2;
+    }
+}
