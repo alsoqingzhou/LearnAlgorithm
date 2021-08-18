@@ -195,3 +195,16 @@ int tree_n2(BTNode *bt) {
         }
     }
 }
+
+// Q5.3.3-9 交换二叉树的所有结点的左右子树
+// 算法思想：递归遍历二叉树
+void exchangeChild(BTNode *p) {
+    if(p != NULL) {
+        exchangeChild(p->lchild); //交换p左孩子的左右子树
+        exchangeChild(p->rchild); //交换p右孩子的左右子树
+        // 然后交换p的左右子树
+        BTNode* temp = p->lchild;
+        p->lchild = p->rchild;
+        p->rchild = temp;
+    }
+}
