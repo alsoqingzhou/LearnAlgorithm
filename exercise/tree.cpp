@@ -208,3 +208,17 @@ void exchangeChild(BTNode *p) {
         p->rchild = temp;
     }
 }
+
+// Q5.3.3-9 求先序遍历序列第k个结点的值
+int count = 0; //全局变量，用于计数
+void PreOrderK(BTNode *p, int k) {
+    
+    if(p != NULL) {
+        ++count;
+        if(i == k) {
+            visit(p);
+        }
+        PreOrderK(p->lchild);
+        PreOrderK(p->rchild);
+    }
+}
