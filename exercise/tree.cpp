@@ -215,10 +215,10 @@ void PreOrderK(BTNode *p, int k) {
     
     if(p != NULL) {
         ++count;
-        if(i == k) {
+        if(count == k) {
             visit(p);
         }
-        PreOrderK(p->lchild);
-        PreOrderK(p->rchild);
+        PreOrderK(p->lchild, k);
+        PreOrderK(p->rchild, k);
     }
 }

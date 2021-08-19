@@ -29,6 +29,9 @@ void Visit(VNode p) {
     cout<<p.data<<endl;
 }
 
+// 在递归过程中，visit数组应为全局变量
+int visit[maxsize];
+
 //Q6.2.6-4 图的邻接表转换为邻接矩阵
 void trans(AGraph *g, MGraph *ng) {
     ArcNode *p; //用于遍历每条边的指针
@@ -136,7 +139,6 @@ int BFSi_j(AGraph *g, int i, int j) {
 // 深度优先
 // 算法思想：深度优先搜索过程中，顺带上目标结点的位置，以及判断符，如果遍历到目标结点，说明有路径，从递归中返回
 int DFSi_j(AGraph *g, int i, int j, bool &path) {
-    int visit[maxsize];
     ArcNode *p;
 
     visit[i] = 1;
@@ -153,4 +155,29 @@ int DFSi_j(AGraph *g, int i, int j, bool &path) {
         }
         p = p->nextArc;
     }
+}
+
+// Q6.3.4-5 输出邻接表表示的图中从i到j所有简单路径
+// 算法思想：从i开始对图深度优先遍历，设置路径数组，每深度遍历到一个未访问结点，依次添加进路径数组
+// 每一次深度遍历找到j,就打印出路径，退出该层递归前消除对当前访问结点的访问痕迹，以便在下一条不同路径时利用该结点
+void graph_i_j(AGraph *g, int i, int j, int path[], int k) { //k未路径结点数计数器，或成为结点的路径数组指针
+    ArcNode *p; //辅助边指针
+
+    ++k; //路径数组入当前访问结点i
+    path[k] = i;
+    visit[i] = 1;
+
+    if(i = j) {
+        //深度遍历到目标结点，打印路径数组
+    } else { //没有找到，继续遍历
+        p = g->adjList[i].firstArc;
+        while(p != NULL) {
+            if(visit[p->adjVex] == 0) {
+                graph_i_j(g, i, j, path, k);
+                p = p->nextArc;
+            }
+        }
+    }
+    // 打印出一条路径，当前访问结点清除访问记录
+    visit[i] = 0;
 }
