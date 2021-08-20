@@ -136,3 +136,21 @@ int divide(int a[], int low, int high, int n) {
     for(int j = i; j < n; ++j) s2 += a[j];
     return s2 - s1;
 }
+
+// Q8.3.3-7 荷兰国旗问题
+void sort_3_Color(char a[], int n) {
+    int i, j, k;
+    i = 0; //i之前都为红色
+    k = n-1; //k之后都为蓝色
+    j = 0; //遍历数组指针
+    while(j < n) {
+        switch(a[j]) { //根据遍历颜色判断
+            case 'red': swap(a[j], a[i]); ++i; 
+            
+            case 'white': ++j; //白色不操作
+
+            case 'blue': swap(a[j], a[k]); --k; //遍历指针j不移动，防止交换过来的颜色仍未蓝色，若移动后必会错过
+        }
+    }
+}
+
