@@ -272,3 +272,19 @@ int find_main(int a[], int n) {
         return -1;
     }
 }
+
+// Q2.2.3-13 找出一个数组中未出现的最小整数
+// 算法思想：遍历数组，对每一个正整数，在辅助数组中该正整数对应位置标记
+int find_maxN(int a[], int n) {
+    int b[maxsize];
+    for(int i = 0; i < n; ++i) {
+        if(a[i] > 0) {
+            b[a[i]] = 1;
+        }
+    }
+    int i = 1;
+    while(b[i] != 0){
+        ++i;
+    }
+    return i;
+}
