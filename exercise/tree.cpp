@@ -209,7 +209,7 @@ void exchangeChild(BTNode *p) {
     }
 }
 
-// Q5.3.3-9 求先序遍历序列第k个结点的值
+// Q5.3.3-10 求先序遍历序列第k个结点的值
 int count = 0; //全局变量，用于计数
 void PreOrderK(BTNode *p, int k) {
     
@@ -222,3 +222,41 @@ void PreOrderK(BTNode *p, int k) {
         PreOrderK(p->rchild, k);
     }
 }
+
+// Q5.3.3-11 删除二叉树中结点值x为根结点的子树
+// 算法思想：层次遍历，对结点的左右孩子检查值并执行删除操作
+// 删除某个结点为根结点的子树，采用后序遍历，先删除其左孩子，再删除其右孩子
+void deleteNode(BTNode *bt) {
+    if(bt != NULL) {
+        deleteNode(bt->lchild);
+        deleteNode(bt->rchild);
+        free(bt);
+    }
+}
+void delete_x_node(BTNode *bt, int x) {
+    BTNode* que[maxsize];
+    int front = -1, rear = -1;
+
+    BTNode *p;
+    if(bt != NULL) {
+        que[++rear] = bt;
+
+        while(front != rear) {
+            p = que[++front];
+            if(p->lchild != NULL) {
+                if(p->lchild->data == x) {
+                    deleteNode(p->lchild);
+                }// 确认则删除，否则入队遍历
+                que[++rear] = p->lchild;
+            }
+            if(p->rchild != NULL) {
+                if(p->rchild->data == x) {
+                    deleteNode(p->rchild);
+                }
+                que[++rear] = p->rchild;
+            }
+        }
+    }
+}
+
+
