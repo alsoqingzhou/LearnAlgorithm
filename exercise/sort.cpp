@@ -160,3 +160,32 @@ void sort_3_Color(char a[], int n) {
     }
 }
 
+// Q8.4.3-4 单链表表示的序列进行简单选择排序
+typedef struct LNode{
+    int data;
+    struct LNode* next;
+}LNode;
+
+void simple_sort_link(LNode* &l, int n) { //传入单链表长度
+    LNode *p, *q, *r; //一个遍历链表，一个指向本趟最小值, 一个指向最小值前驱
+    int temp = maxsize; //暂存最小值
+    LNode *s = l; //标记每趟开始的位置
+
+    while(s != NULL) {
+        p = s;
+        while(p->next != NULL) {
+            if(p->next->data < temp) { //找出一趟内的最小值
+                temp = p->next->data;
+                q = p->next;
+                r = p;
+            }
+            p = p->next;
+        }
+        // 将最小值对应的结点交换到表头
+        r->next = q->next;
+        q->next = l->next;
+        l->next = q;
+
+        s = s->next;
+    }
+}
