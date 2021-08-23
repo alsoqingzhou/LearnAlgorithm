@@ -166,7 +166,7 @@ typedef struct LNode{
     struct LNode* next;
 }LNode;
 
-void simple_sort_link(LNode* &l, int n) { //传入单链表长度
+void simple_sort_link(LNode* &l) { //传入单链表长度
     LNode *p, *q, *r; //一个遍历链表，一个指向本趟最小值, 一个指向最小值前驱
     int temp = maxsize; //暂存最小值
     LNode *s = l; //标记每趟开始的位置
