@@ -288,3 +288,35 @@ int find_maxN(int a[], int n) {
     }
     return i;
 }
+
+// Q2.2.3-14 确定升序排列的三个数组构成的三元组最小距离
+// 算法思想：三元组距离取决于三个数组中所有排列组合中，三个数距离最贴近时，最小数与最大数之间距离
+// 三个指针遍历三个数组，更新最小距离，移动最小值的指针使其指向的值变大，缩小与最大值的距离
+int min_3(int a, int b, int c) {
+    int min = maxsize;
+    int list[3] = {a, b, c};
+    for(int i = 0; i < 3; ++i) {
+        if(list[i] < min) {
+            min = list[i];
+        }
+    }
+    return min;
+}
+int tri_list(int a[], int b[], int c[]) {
+    int n1, n2, n3; //三个数组的长度
+    int i, j, k; //三个遍历指针
+    i = j = k = 0;
+    int d = maxsize; //记录当前遍历的最小距离
+    int temp;
+    while(i<n1 && j<n2 && k<n3) { //其中一个遍历结束，确定最小距离
+        temp = abs(a[i]-b[j]) + abs(b[i]-c[k]) + abs(a[i]-c[k]);
+        if(temp < d) {
+            d = temp;
+        }
+        int min = min_3(a[i], b[j], c[k]);
+        if(a[i] == min) ++i;
+        else if(b[j] == min) ++j;
+        else ++k;
+    }
+    return d;
+}
