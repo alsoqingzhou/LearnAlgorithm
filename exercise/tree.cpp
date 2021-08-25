@@ -259,4 +259,40 @@ void delete_x_node(BTNode *bt, int x) {
     }
 }
 
+// Q5.3.3-12 打印二叉树中值为x的结点的祖先
+// 算法思想：层次遍历，对结点的左右孩子的值进行检查
+int print_x_father(BTNode *bt, int x) {
+    BTNode* que[maxsize];
+    int front = -1, rear = -1;
+    BTNode *p;
+
+    que[++rear] = bt;
+
+    int flag = 0; //标记查找成功与否
+
+    while(front != rear) {
+        p = que[++front];
+        if(p->lchild != NULL) {
+            if(p->lchild->data == x) {
+                flag = 1;
+                visit(p);
+                return 1;
+            }
+        }
+        if(p->rchild != NULL) {
+            if(p->rchild->data == x) {
+                flag = 1;
+                visit(p);
+                return 1;
+            }
+        }
+    }
+
+    if(flag == 0) { //查找失败
+        return 0;
+    }
+}
+
+// 打印上述符合要求结点的所有祖先结点
+
 
