@@ -189,3 +189,30 @@ void simple_sort_link(LNode* &l) { //传入单链表长度
         s = s->next;
     }
 }
+
+// Q8.4.3-5 判断数据序列是否为小根堆
+// 算法思想：检查父节点是否小于其左右孩子
+// 考虑总结点数，奇数个无单分支结点，偶数个有单分支结点
+// 检查过程中有不符合即返回报错，全部检查合格才确认为小根堆
+// 数组从下标1开始存储
+bool isSmallHeap(int a[], int n) {
+    if(n % 2 == 0) { //有一个单分支结点
+        if(a[n/2] > a[n]) {
+            return false;
+        } else {
+            for(int i = 1; i < n/2 - 1; ++i) {
+                if(a[i] > a[2*i] || a[i] > a[2*i+1]) {
+                    return false;
+                }
+            }
+        }
+    } else {
+        for(int i = 1; i <= n/2; ++i) {
+            if(a[i] > a[2*i] || a[i] > a[2*i+1]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
