@@ -320,3 +320,30 @@ int tri_list(int a[], int b[], int c[]) {
     }
     return d;
 }
+
+/* 单链表结构体定义（无头结点）*/
+typedef struct LNode{
+    int data;
+    struct LNode *next;
+}LNode;
+
+// Q2.3.7-1 递归算法删除不带头结点单链表所有值为x的结点
+void delete_node(LNode *p, LNode *r) {// 删除p指针下一个结点，r指针辅助删除
+    r = p->next;
+    p->next = r->next;
+    free(r);
+}
+void recursion_delete_x(LNode *&L, int x) {
+    LNode *p;
+    if(L == NULL) { //递归出口
+        return;
+    }
+    if(L->data == x) {
+        p = L;
+        L = p->next;
+        free(p);
+        recursion_delete_x(L, x);
+    } else { //从L下一结点开始
+        recursion_delete_x(L->next, x);
+    }
+}
