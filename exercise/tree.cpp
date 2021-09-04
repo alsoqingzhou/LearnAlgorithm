@@ -9,6 +9,9 @@ typedef struct BTNode{
 
     struct BTNode *lchild;
     struct BTNode *rchild;
+
+    int ltag; //标记左孩子访问过
+    int rtag; //标记右孩子访问过
 } BTNode;
 
 void visit(BTNode *bt) {
@@ -294,5 +297,32 @@ int print_x_father(BTNode *bt, int x) {
 }
 
 // 打印上述符合要求结点的所有祖先结点
+// 首先明确后序非递归遍历方法
+// 借助一个辅助栈，从根结点开始，不断将其左孩子入栈，到达左下角
+// 读取栈顶元素，若栈顶元素右孩子为空或者已访问，则访问栈顶元素
+// 否则，对栈顶元素进行上述一路向左入栈操作
+// 注：树的结构体中添加结点的左右孩子访问标记位
+void postOrder(BTNode *bt) {
+    BTNode *p; //辅助遍历指针
+    BTNode *r;
+    BTNode* stack[maxsize];
+    int top = -1;
 
+    stack[++top] = bt; //根结点入栈
+    p = bt;
 
+    while(top != -1) {
+        while(p->lchild != NULL) {
+            stack[++top] = p->lchild;
+            p = p->lchild;
+        }
+        if(p->rtag == 1 || p->rchild == NULL) {
+            r = stack[--top];
+            visit(r);
+            r->rtag = 1;
+        } else {
+            p = p->rchild;
+        }
+    }
+    
+}
